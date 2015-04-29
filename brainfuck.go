@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -12,21 +13,21 @@ const (
 )
 
 func main() {
+	var inputFile string
 	cells := [CELL_NUMBER]byte{}
 	curCell := 0 // point to current cell, initialized to point to first cell
 
-	inputFile := flag.String("file", "", "path to program file")
+	flag.StringVar(&inputFile, "inputFile", "", "path to program file")
 	flag.Parse()
 
-	if *inputFile == "" {
+	if len(inputFile) == 0 {
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	buf, err := ioutil.ReadFile(*inputFile)
+	buf, err := ioutil.ReadFile(inputFile)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 	program := string(buf)
 
@@ -46,8 +47,7 @@ func main() {
 			var in_char byte
 			_, err := fmt.Scanf("%c", &in_char)
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatal(err.Error())
 			}
 			cells[curCell] = in_char
 		case '[':
@@ -59,8 +59,7 @@ func main() {
 						break
 					}
 					if j == len(program)-1 {
-						fmt.Println("could not found matching [")
-						os.Exit(1)
+						log.Fatal("could not found matching [")
 					}
 				}
 			}
@@ -73,8 +72,7 @@ func main() {
 						break
 					}
 					if j == 0 {
-						fmt.Println("could not found matching [")
-						os.Exit(1)
+						log.Fatal("could not found matching [")
 					}
 				}
 			}
