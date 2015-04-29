@@ -17,7 +17,7 @@ func main() {
 	cells := [CELL_NUMBER]byte{}
 	curCell := 0 // point to current cell, initialized to point to first cell
 
-	flag.StringVar(&inputFile, "inputFile", "", "path to program file")
+	flag.StringVar(&inputFile, "file", "", "path to program file")
 	flag.Parse()
 
 	if len(inputFile) == 0 {
