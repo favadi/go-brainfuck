@@ -13,7 +13,7 @@ const (
 
 func main() {
 	cells := [CELL_NUMBER]byte{}
-	data_ptr := 0 // point to current cell, initialized to point to first cell
+	curCell := 0 // point to current cell, initialized to point to first cell
 
 	inputFile := flag.String("file", "", "path to program file")
 	flag.Parse()
@@ -28,20 +28,20 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	test_str := string(buf)
+	program := string(buf)
 
-	for i := 0; i < len(test_str); i++ {
-		switch test_str[i] {
+	for i := 0; i < len(program); i++ {
+		switch program[i] {
 		case '+':
-			cells[data_ptr] = cells[data_ptr] + 1
+			cells[curCell] = cells[curCell] + 1
 		case '-':
-			cells[data_ptr] = cells[data_ptr] - 1
+			cells[curCell] = cells[curCell] - 1
 		case '>':
-			data_ptr = data_ptr + 1
+			curCell = curCell + 1
 		case '<':
-			data_ptr = data_ptr - 1
+			curCell = curCell - 1
 		case '.':
-			fmt.Printf("%c", cells[data_ptr])
+			fmt.Printf("%c", cells[curCell])
 		case ',':
 			var in_char byte
 			_, err := fmt.Scanf("%c", &in_char)
@@ -49,16 +49,16 @@ func main() {
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			cells[data_ptr] = in_char
+			cells[curCell] = in_char
 		case '[':
 			// find next ]
-			if cells[data_ptr] == 0 {
-				for j := i; j < len(test_str); j++ {
-					if test_str[j] == ']' {
+			if cells[curCell] == 0 {
+				for j := i; j < len(program); j++ {
+					if program[j] == ']' {
 						i = j
 						break
 					}
-					if j == len(test_str)-1 {
+					if j == len(program)-1 {
 						fmt.Println("could not found matching [")
 						os.Exit(1)
 					}
@@ -66,9 +66,9 @@ func main() {
 			}
 		case ']':
 			// find previous [
-			if cells[data_ptr] != 0 {
+			if cells[curCell] != 0 {
 				for j := i; j > 0; j-- {
-					if test_str[j] == '[' {
+					if program[j] == '[' {
 						i = j
 						break
 					}
